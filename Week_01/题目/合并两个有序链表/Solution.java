@@ -11,7 +11,7 @@
 class Solution {
     public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
         // 题意: 把两个升序的链表, 合并成一个链表
-        // 解法: 
+        // 解法: 迭代
         // 时间复杂度: O(m + n)
         // 空间复杂度: O(1)
         ListNode result = new ListNode(-1);
