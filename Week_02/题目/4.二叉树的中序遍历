@@ -9,6 +9,9 @@
  */
 class Solution {
     public List<Integer> inorderTraversal(TreeNode root) {
+        // 前序遍历规则: 左儿子 -> 根 -> 右儿子
+        // 时间复杂度: O(n)
+        // 空间复杂度: O(n)
         if (root == null) {
             return Collections.emptyList();
         }
