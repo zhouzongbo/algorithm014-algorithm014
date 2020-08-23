@@ -1,0 +1,23 @@
+class Solution {
+    public List<Integer> preorder(Node root) {
+        // 时间复杂度: O(n)
+        // 空间复杂度: O(n)
+        // 循环遍历, 准备两个双向链表
+        LinkedList<Node> stack = new LinkedList<>();
+        LinkedList<Integer> output = new LinkedList<>();
+        // 根节点压入栈中
+        stack.add(root);
+
+        while(!stack.isEmpty()) {
+            // 每次都从栈尾拿出一个元素
+            Node node = stack.pollLast();
+            output.add(node.val);
+            // 找子节点. 由于我们每次都是从栈顶取出数据, 所以要v1 , v2 , v3, 则压入栈的顺序需要改变为 v3, v2, v1, 栈规则: 先进后出
+            Collections.reverse(node.children);
+            for (Node node1: node.children) {
+                stack.add(node1);
+            }
+        }
+        return output;
+    }
+}

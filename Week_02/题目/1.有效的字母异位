@@ -1,0 +1,60 @@
+import java.util.HashMap;
+
+//leetcode submit region begin(Prohibit modification and deletion)
+// 解法1: 暴力 + HashMap
+class Solution {
+    public boolean isAnagram(String s, String t) {
+        if (s.length() != t.length()) {
+            // 字母长度不一致, 一定不是字母异位词
+            return false;
+        }
+        Map<Character, Integer> sTemp = new HashMap<>(s.length());
+        for (int i = 0; i < s.length(); i++) {
+            int size = sTemp.getOrDefault(s.charAt(i), 0);
+            size++;
+            sTemp.put(s.charAt(i), size);
+        }
+
+        for (int j = 0; j < t.length(); j++) {
+            Integer size = sTemp.get(t.charAt(j));
+            if (size == null) {
+                return false;
+            }
+            size--;
+            if (size > 0) {
+                sTemp.put(t.charAt(j), size);
+            } else {
+                sTemp.remove(t.charAt(j));
+            }
+        }
+        return sTemp.isEmpty();
+    }
+}
+//leetcode submit region end(Prohibit modification and deletion)
+
+
+import java.util.HashMap;
+
+//leetcode submit region begin(Prohibit modification and deletion)
+// 解法2: hash表
+class Solution {
+    public boolean isAnagram(String s, String t) {
+        if (s.length() != t.length()) {
+            // 字母长度不一致, 一定不是字母异位词
+            return false;
+        }
+        // 由于英文字符只会有26个并且只会包含小写字母, 由于a的97, 所以 a - a = 0, 从下标0开始计算,其他的字母依次递增
+        int[] counter = new int[26];
+        for (int i = 0; i < s.length(); i++) {
+            counter[s.charAt(i) - 'a']++;
+        }
+
+        for (int j = 0; j < t.length(); j++) {
+            counter[t.charAt(j) - 'a']--;
+            if (counter[t.charAt(j) - 'a'] < 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
