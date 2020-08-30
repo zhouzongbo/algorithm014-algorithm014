@@ -1,0 +1,48 @@
+//给定两个整数 n 和 k，返回 1 ... n 中所有可能的 k 个数的组合。
+//
+// 示例:
+//
+// 输入: n = 4, k = 2
+//输出:
+//[
+//  [2,4],
+//  [3,4],
+//  [2,3],
+//  [1,2],
+//  [1,3],
+//  [1,4],
+//]
+// Related Topics 回溯算法
+// 👍 338 👎 0
+
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+
+//leetcode submit region begin(Prohibit modification and deletion)
+class Solution {
+    private List<List<Integer>> ans;
+    private int n;
+    private int k;
+    public List<List<Integer>> combine(int n, int k) {
+        // 回溯, 找到所有可能的解法
+        ans = new LinkedList<>();
+        this.n = n;
+        this.k = k;
+        back(1, new LinkedList<>());
+        return ans;
+    }
+    private void back(int cur, LinkedList<Integer> container) {
+        if (container.size() == k) {
+            // 如果已经有满足条件的元素, 则把集合加入到队列中
+            ans.add(new LinkedList<>(container));
+        }
+
+        for (int i = cur; i <= n; i++) {
+            container.add(i);
+            back(i + 1, container);
+            container.removeLast(); // 移除最后一个元素,  比如第一次遍历后集合中包含了[1,2], 则把2移除[1], 下个树[1,3], 移除3 这样就能使用同一个container把所有的可能给遍历完
+        }
+    }
+}
+//leetcode submit region end(Prohibit modification and deletion)

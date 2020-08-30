@@ -1,0 +1,87 @@
+//根据一棵树的前序遍历与中序遍历构造二叉树。
+//
+// 注意:
+//你可以假设树中没有重复的元素。
+//
+// 例如，给出
+//
+// 前序遍历 preorder = [3,9,20,15,7]
+//中序遍历 inorder = [9,3,15,20,7]
+//
+// 返回如下的二叉树：
+//
+//     3
+//   / \
+//  9  20
+//    /  \
+//   15   7
+// Related Topics 树 深度优先搜索 数组
+// 👍 648 👎 0
+
+
+//leetcode submit region begin(Prohibit modification and deletion)
+
+/**
+ * 参考链接: https://leetcode-cn.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/solution/cong-qian-xu-yu-zhong-xu-bian-li-xu-lie-gou-zao-9/
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    private Map<Integer, Integer> inMap;
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        // 前序遍历: 根 左节点 右节点
+        // 中序遍历: 左节点 根 右节点
+        // 把中序数组加入map中
+        // 从前序数组中获取的第一个元素就是根节点, 根节点左边就是  左节点, 右边就是右节点
+        int preLen = preorder.length;
+        int inLen = inorder.length;
+        if (preLen != inLen) {
+            // 这里给出树中没有重复元素, 说明这两个数组应该是相等的
+            return null;
+        }
+
+        // 中序数组加入到Map中 key: 值, value: 下标
+        inMap = new HashMap<>(inLen);
+        for (int i = 0; i < inLen; i++) {
+            inMap.put(inorder[i], i);
+        }
+
+        return buildTree(preorder, 0, preLen - 1, 0, inLen - 1);
+    }
+
+
+    /**
+     * 构建树
+     * @param preorder 前序数组
+     * @param inorder 中序数组
+     * @param preLeft 前序遍历子区间的左边界,
+     * @param preRight 前序遍历子区间的右边界
+     * @param inLeft 中序遍历子区间的左边界
+     * @param inRight 中序遍历子区间的右边界
+     * @return
+     */
+    private TreeNode buildTree(int[] preorder, int preLeft, int preRight, int inLeft, int inRight) {
+        // 1.终止条件: 没有可用的区间, 及 左边界大于右右边界
+        if (preLeft > preRight || inLeft > inRight) {
+            return null;
+        }
+        // 2.处理逻辑
+        // 找出根节点
+        int rootVal = preorder[preLeft];
+        // 构建根节点
+        TreeNode root = new TreeNode(rootVal);
+        // 找到中序遍历中的根节点下标
+        int rootIndex = inMap.get(rootVal);
+        // 3.进入下一层
+        root.left = buildTree(preorder, preLeft + 1, rootIndex - inLeft + preLeft, inLeft, rootIndex - 1);
+        root.right = buildTree(preorder,rootIndex - inLeft + preLeft + 1, preRight, rootIndex + 1, inRight);
+        // 4.更新状态 这里不需要更新状态
+        return root;
+    }
+}
+//leetcode submit region end(Prohibit modification and deletion)
