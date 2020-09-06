@@ -8,22 +8,26 @@
  * }
  */
 class Solution {
-
-        public List<Integer> preorderTraversal(TreeNode root) {
-            // 前序遍历规则: 根 -> 左儿子 -> 右儿子
-            // 时间复杂度: O(n)
-            // 空间复杂度: O(n)
-            List<Integer> result = new ArrayList<>();
-            helper(root, result);
-            return result;
+    public List<Integer> preorderTraversal(TreeNode root) {
+        // 前序遍历规则:  根 -> 左儿子 -> 右儿子
+        // 时间复杂度: O(n)
+        // 空间复杂度: O(n)
+        if (root == null) {
+            return Collections.emptyList();
         }
 
-        private void helper(TreeNode node, List<Integer> result) {
-            if (node == null) {
-                return;
-            }
-            result.add(node.val);
-            helper(node.left, result);
-            helper(node.right, result);
+        List<Integer> result = new ArrayList<>();
+        helper(root, result);
+        return result;
+    }
+
+    private void helper(TreeNode node, List<Integer> result) {
+        if (node == null) {
+            return;
         }
+
+        result.add(node.val);
+        helper(node.left, result);
+        helper(node.right, result);
+    }
 }
