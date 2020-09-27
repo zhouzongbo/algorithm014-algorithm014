@@ -1,0 +1,117 @@
+//给定两个单词（beginWord 和 endWord）和一个字典，找到从 beginWord 到 endWord 的最短转换序列的长度。转换需遵循如下规则：
+//
+//
+//
+// 每次转换只能改变一个字母。
+// 转换过程中的中间单词必须是字典中的单词。
+//
+//
+// 说明:
+//
+//
+// 如果不存在这样的转换序列，返回 0。
+// 所有单词具有相同的长度。
+// 所有单词只由小写字母组成。
+// 字典中不存在重复的单词。
+// 你可以假设 beginWord 和 endWord 是非空的，且二者不相同。
+//
+//
+// 示例 1:
+//
+// 输入:
+//beginWord = "hit",
+//endWord = "cog",
+//wordList = ["hot","dot","dog","lot","log","cog"]
+//
+//输出: 5
+//
+//解释: 一个最短转换序列是 "hit" -> "hot" -> "dot" -> "dog" -> "cog",
+//     返回它的长度 5。
+//
+//
+// 示例 2:
+//
+// 输入:
+//beginWord = "hit"
+//endWord = "cog"
+//wordList = ["hot","dot","dog","lot","log"]
+//
+//输出: 0
+//
+//解释: endWord "cog" 不在字典中，所以无法进行转换。
+// Related Topics 广度优先搜索
+// 👍 427 👎 0
+
+import java.util.*;
+
+//leetcode submit region begin(Prohibit modification and deletion)
+class Solution {
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        // 构建映射关系
+        Map<String, Set<String>> coder = new HashMap<>(16);
+        for (String word : wordList) {
+            for (int i = 0; i < word.length(); i++) {
+                // 新的单词
+                String newWord = word.substring(0, i) + "*" + word.substring(i + 1);
+                // 新单词与旧单词的对应关系
+                coder.computeIfAbsent(newWord, k -> new HashSet<>()).add(word);
+            }
+        }
+
+        // 为了避免出现环，所以这里需要记录已访问的元素
+        Set<String> visited = new HashSet<>();
+        Queue<Pair> stack = new LinkedList<>();
+        stack.add(new Pair(beginWord, 1));
+        while (!stack.isEmpty()) {
+            final Pair pair = stack.poll();
+            final String word = pair.getWord();
+            final int level = pair.getLevel();
+
+            for (int i = 0; i < word.length(); i++) {
+                String currentWord = word.substring(0, i) + "*" + word.substring(i + 1);
+                final Set<String> allWord = coder.getOrDefault(currentWord, new HashSet<>());
+                if (allWord.isEmpty()) {
+                    continue;
+                }
+                for (String s : allWord) {
+                    if (endWord.equals(s)) {
+                        return level + 1;
+                    }
+                    if (!visited.contains(s)) {
+                        visited.add(s);
+                        stack.add(new Pair(s, level + 1));
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+
+    class Pair {
+        private String word;
+
+        private int level;
+
+        public Pair(String word, int level) {
+            this.word = word;
+            this.level = level;
+        }
+
+        public String getWord() {
+            return word;
+        }
+
+        public void setWord(String word) {
+            this.word = word;
+        }
+
+        public int getLevel() {
+            return level;
+        }
+
+        public void setLevel(int level) {
+            this.level = level;
+        }
+    }
+}
+//leetcode submit region end(Prohibit modification and deletion)

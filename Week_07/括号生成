@@ -1,0 +1,76 @@
+//数字 n 代表生成括号的对数，请你设计一个函数，用于能够生成所有可能的并且 有效的 括号组合。
+//
+//
+//
+// 示例：
+//
+// 输入：n = 3
+//输出：[
+//       "((()))",
+//       "(()())",
+//       "(())()",
+//       "()(())",
+//       "()()()"
+//     ]
+//
+// Related Topics 字符串 回溯算法
+// 👍 1328 👎 0
+
+
+//leetcode submit region begin(Prohibit modification and deletion)
+class Solution {
+    public List<String> generateParenthesis(int n) {
+        List<String> answer = new ArrayList<>(n);
+        if (n == 0) {
+            return answer;
+        }
+//        dfs("", n , n, answer);
+        dfs("", 0, 0, n, answer);
+        return answer;
+    }
+
+
+    public void dfs(String str, int left, int right, int len, List<String> ans) {
+        // 递归终止条件
+        if (left == len && right == len) {
+            ans.add(str);
+            return;
+        }
+        // 剪枝，有且仅当左边大于右边时才能执行左边的操作
+        if (left < right) {
+            return;
+        }
+        // 处理当前层逻辑
+        if (left <= len) {
+            dfs(str + "(", left + 1, right, len, ans);
+        }
+
+        if (right <= len) {
+            dfs(str + ")", left, right + 1, len, ans);
+        }
+
+
+    }
+//
+//    public void dfs(String str, int left, int right, List<String> ans) {
+//        // 递归终止条件
+//        if (left == 0 && right == 0) {
+//            ans.add(str);
+//            return;
+//        }
+//
+//        // 剪枝，有且仅当左括号大于右括号
+//        if (left > right) {
+//            return;
+//        }
+//
+//        if (left > 0) {
+//            dfs(str + "(", left - 1, right, ans);
+//        }
+//
+//        if (right > 0) {
+//            dfs(str + ")", left, right - 1, ans);
+//        }
+//    }
+}
+//leetcode submit region end(Prohibit modification and deletion)
